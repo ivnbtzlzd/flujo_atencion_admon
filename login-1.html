@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SisFlow — Acceso</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5fa;
+    --white: #ffffff;
+    --surface: #f0ecf7;
+    --border: #e2d9f3;
+    --purple: #6b2d8b;
+    --purple-dark: #521f6a;
+    --purple-light: #f3ecf9;
+    --purple-dim: rgba(107,45,139,0.08);
+    --purple-border: rgba(107,45,139,0.2);
+    --red: #c41e3a;
+    --red-dark: #a01830;
+    --red-dim: rgba(196,30,58,0.08);
+    --red-border: rgba(196,30,58,0.2);
+    --text: #1a0f2e;
+    --text2: #4a3560;
+    --muted: #9b8bb0;
+    --success: #1a7a4a;
+    --warn: #b45309;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* LEFT PANEL */
+  .left {
+    width: 52%;
+    background: linear-gradient(145deg, var(--purple) 0%, var(--purple-dark) 60%, #3a1050 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .left::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+
+  .left::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 40px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(196,30,58,0.15);
+    pointer-events: none;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .brand-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 12px rgba(196,30,58,0.6);
+    animation: pulse 2s infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .brand-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+
+  .hero h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(26px, 3vw, 42px);
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.18;
+    margin-bottom: 18px;
+  }
+
+  .hero h1 span {
+    color: #f4a7b9;
+  }
+
+  .hero p {
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+    line-height: 1.75;
+    max-width: 340px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 26px;
+    font-weight: 600;
+    color: #fff;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  /* RIGHT PANEL */
+  .right {
+    width: 48%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 40px;
+    background: var(--white);
+  }
+
+  .form-box {
+    width: 100%;
+    max-width: 380px;
+    animation: fadeUp 0.45s ease both;
+  }
+
+  .form-header { margin-bottom: 36px; }
+
+  .form-header h2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .form-header p { color: var(--muted); font-size: 13px; }
+
+  .field { margin-bottom: 18px; }
+
+  .field label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .field input:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px var(--purple-dim);
+    background: #fff;
+  }
+
+  .field input::placeholder { color: var(--muted); }
+
+  .btn-login {
+    width: 100%;
+    padding: 13px;
+    margin-top: 6px;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-login:hover { background: var(--purple-dark); }
+  .btn-login:active { transform: scale(0.99); }
+
+  .error-msg {
+    background: var(--red-dim);
+    border: 1px solid var(--red-border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    margin-bottom: 18px;
+    display: none;
+  }
+
+  .role-hint {
+    margin-top: 28px;
+    padding: 14px 16px;
+    background: var(--purple-light);
+    border: 1px solid var(--purple-border);
+    border-radius: 8px;
+    border-left: 3px solid var(--purple);
+  }
+
+  .role-hint p { font-size: 12px; color: var(--text2); line-height: 1.7; }
+  .role-hint strong { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--purple); letter-spacing: 0.5px; }
+
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    .left { width: 100%; padding: 36px 24px 40px; }
+    .hero h1 { font-size: 26px; }
+    .right { width: 100%; padding: 36px 24px; }
+    .form-box { max-width: 100%; }
+    .stats { gap: 20px; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(14px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="left">
+  <div class="brand">
+    <div class="brand-dot"></div>
+    <span class="brand-name">SisFlow · Sistema de Aprobación</span>
+  </div>
+
+  <div class="hero">
+    <p class="hero-label">Plataforma Operativa</p>
+    <h1>Flujos de<br>aprobación<br><span>inteligentes</span></h1>
+    <p>Gestiona tickets, aprobaciones y métricas de desempeño regional desde un solo lugar.</p>
+  </div>
+
+  <div class="stats">
+    <div><span class="stat-num">4</span><span class="stat-label">Roles de acceso</span></div>
+    <div><span class="stat-num">13%</span><span class="stat-label">Umbral de error</span></div>
+    <div><span class="stat-num">6</span><span class="stat-label">Niveles sanción</span></div>
+  </div>
+</div>
+
+<div class="right">
+  <div class="form-box">
+    <div class="form-header">
+      <h2>Bienvenido</h2>
+      <p>Ingresa tus credenciales para continuar</p>
+    </div>
+    <div class="error-msg" id="errorMsg">Usuario o contraseña incorrectos.</div>
+    <div class="field">
+      <label>Correo electrónico</label>
+      <input type="email" id="email" placeholder="tu@correo.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" onclick="handleLogin()">Entrar →</button>
+    <div class="role-hint">
+      <p><strong>ACCESO POR ROL</strong><br>El sistema detecta tu perfil automáticamente — Regional, Gerente, Agente o Supervisor — y te redirige a tu panel.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleLogin() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const err = document.getElementById('errorMsg');
+    if (!email || !password) { err.style.display='block'; err.textContent='Por favor completa todos los campos.'; return; }
+    const roles = { 'regional@demo.com':'panel_regional.html','gerente@demo.com':'panel_gerente.html','agente@demo.com':'panel_agente.html','supervisor@demo.com':'panel_supervisor.html' };
+    if (roles[email] && password==='demo123') { err.style.display='none'; window.location.href=roles[email]; }
+    else { err.style.display='block'; err.textContent='Usuario o contraseña incorrectos.'; }
+  }
+  document.addEventListener('keydown', e => { if(e.key==='Enter') handleLogin(); });
+</script>
+</body>
+</html>
